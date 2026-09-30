@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% set cod_mun = municipio.codigo_tse if municipio else None %}
+{% set local = municipio.nome if municipio else "Bahia" %}
+
+{% block titulo %}{{ nome_cargo }} · {{ local }} · Eleições Bahia{% endblock %}
+
+{% block conteudo %}
+<div class="container secao">
+
+  {# Heurística 3 (controle e liberdade): caminho de volta sempre visível #}
+  <nav class="trilha" aria-label="Você está em">
+    <a href="/">Início</a> › <a href="/resultados">Resultados</a>
+    {% if municipio %} › <span>{{ municipio.nome }}</span>{% endif %}
+  </nav>
+
+  {# Heurística 1 (visibilidade do status): o título diz exatamente o que está na tela #}
+  <h1>{{ nome_cargo }}{% if resultado or not eleicao.municipal %} · {{ local }}{% endif %}</h1>
+  <p class="subtitulo">Eleição {{ eleicao.titulo }}</p>
+
+  <!-- ================= FILTROS ================= -->
+  <section class="filtros" aria-label="Filtros">
+
+    {# Heurística 6 (reconhecer em vez de lembrar): as opções ficam à vista, com a escolhida destacada #}
+    <p class="rotulo">Eleição</p>
+    <div class="opcoes">
+      {% for id, e in eleicoes.items() %}
+        <a href="{{ url_for('resultados', eleicao=id, municipio=cod_mun) }}"
+           class="opcao {% if id == eleicao_id %}ativa{% endif %}"
+           {% if id == eleicao_id %}aria-current="true"{% endif %}>{{ e.titulo }}</a>
+      {% endfor %}
+    </div>
+
+    {# Heurística 5 (prevenção de erros): só aparecem os cargos que existem nesta eleição #}
+    <p class="rotulo">Cargo</p>
+    <div class="opcoes">
+      {% for codigo, nome in eleicao.cargos.items() %}
+        <a href="{{ url_for('resultados', eleicao=eleicao_id, cargo=codigo, municipio=cod_mun) }}"
+           class="opcao escura {% if codigo == cargo %}ativa{% endif %}"
+           {% if codigo == cargo %}aria-current="true"{% endif %}>{{ nome }}</a>
+      {% endfor %}
+    </div>
+
+    <form action="/resultados" class="formulario-filtros">
+      <input type="hidden" name="eleicao" value="{{ eleicao_id }}">
+      <input type="hidden" name="cargo" value="{{ cargo }}">
+
+      <label>
+        <span>Município{% if not eleicao.municipal %} (vazio = Bahia inteira){% endif %}</span>
+        <input name="municipio" list="lista-municipios" autocomplete="off"
+               value="{{ municipio.nome if municipio else termo_municipio }}" placeholder="Ex.: Guanambi">
+      </label>
+      <datalist id="lista-municipios">
+        {% for m in municipios %}<option value="{{ m.nome }}">{% endfor %}
+      </datalist>
+
+      <label>
+        <span>Buscar candidato (nome, número ou partido)</span>
+        <input name="busca" type="search" value="{{ busca }}" placeholder="Ex.: Silva, 13, PSOL">
+      </label>
+
+      <div class="acoes">
+        <button type="submit" class="botao">Ver resultados</button>
+        {# Heurística 3 (controle e liberdade): desfazer todas as escolhas com um clique #}
+        <a href="/resultados" class="limpar">Limpar filtros</a>
+      </div>
+    </form>
+  </section>
+
+  <!-- ================= MENSAGENS ================= -->
+  {# Heurística 9 (ajudar a recuperar de erros): cada problema tem uma mensagem clara e uma saída #}
+
+  {% if erro %}
+    <div class="aviso erro" role="alert">
+      <strong>Não foi possível carregar os dados agora</strong>
+      <p>{{ erro }} O servidor do TSE pode estar temporariamente fora do ar.
+         <a href="{{ request.full_path }}">Tentar novamente</a></p>
+    </div>
+
+  {% elif termo_municipio and not municipio %}
+    <div class="aviso" role="status">
+      <strong>Município "{{ termo_municipio }}" não encontrado na Bahia</strong>
+      {% if sugestoes %}
+        <p>Você quis dizer:
+          {% for m in sugestoes %}
+            <a href="{{ url_for('resultados', eleicao=eleicao_id, cargo=cargo, municipio=m.codigo_tse) }}">{{ m.nome }}</a>{% if not loop.last %}, {% endif %}
+          {% endfor %}
+        </p>
+      {% else %}
+        <p>Confira a grafia ou veja a <a href="/municipios">lista de municípios</a>.</p>
+      {% endif %}
+    </div>
+
+  {% elif eleicao.municipal and not municipio %}
+    <div class="aviso" role="status">
+      <strong>Escolha um município</strong>
+      <p>Eleições municipais (prefeito e vereador) têm resultado separado para cada um dos
+         417 municípios. Digite o nome no campo acima ou consulte a <a href="/municipios">lista por região</a>.</p>
+    </div>
+
+  {% elif not resultado %}
+    <div class="aviso" role="status">
+      <strong>Resultado não disponível</strong>
+      <p>O TSE não publicou resultado de {{ nome_cargo | lower }} para {{ local }} nesta eleição.
+         No 2º turno, só aparecem os locais onde houve segunda votação.</p>
+    </div>
+  {% endif %}
+
+  <!-- ================= RESULTADO ================= -->
+  {% if resultado %}
+    <div class="contexto">
+      <p>
+        {% if municipio %}
+          Região de {{ municipio.regiao }} · Região imediata de {{ municipio.regiao_imediata }} <small>(IBGE)</small>
+        {% else %}
+          Todo o estado da Bahia
+        {% endif %}
+      </p>
+      <p>Dados do TSE de {{ resultado.atualizado_em }}</p>
+    </div>
+
+    {# Heurística 1 (visibilidade do status): em que ponto está a contagem de votos #}
+    <p class="status-apuracao {% if resultado.apuracao.iniciada %}iniciada{% endif %}" role="status">
+      {{ resultado.apuracao.texto }}
+    </p>
+
+    {% set t = resultado.totais %}
+    {% if not resultado.apuracao.iniciada %}
+      <div class="aviso" role="status">
+        <strong>A votação acontece em 4 de outubro de 2026</strong>
+        <p>Por enquanto, a lista mostra os {{ resultado.candidatos | length }} candidatos registrados no TSE,
+           em ordem alfabética. Eleitorado apto: {{ t.eleitorado | numero }}. Os votos aparecem aqui
+           automaticamente durante a apuração.</p>
+      </div>
+    {% else %}
+    <dl class="totais">
+      <div><dt>Eleitorado</dt><dd>{{ t.eleitorado | numero }}</dd></div>
+      <div><dt>Comparecimento</dt><dd>{{ t.comparecimento | numero }} <small>{{ t.percentual_comparecimento }}%</small></dd></div>
+      <div><dt>Abstenção</dt><dd>{{ t.abstencao | numero }} <small>{{ t.percentual_abstencao }}%</small></dd></div>
+      <div><dt>Votos válidos</dt><dd>{{ t.validos | numero }}</dd></div>
+      <div><dt>Brancos</dt><dd>{{ t.brancos | numero }}</dd></div>
+      <div><dt>Nulos</dt><dd>{{ t.nulos | numero }}</dd></div>
+    </dl>
+    {% endif %}
+
+    <div class="titulo-lista">
+      <h2>Candidatos</h2>
+      <p>
+        {% if busca %}
+          {{ total_encontrado }} de {{ resultado.candidatos | length }} candidatos para "{{ busca }}"
+        {% elif resultado.apuracao.iniciada %}
+          {{ total_encontrado }} candidatos, ordenados por número de votos
+        {% else %}
+          {{ total_encontrado }} candidatos, em ordem alfabética
+        {% endif %}
+      </p>
+    </div>
+
+    {% if candidatos %}
+      <ol class="candidatos">
+        {% for c in candidatos %}
+          {% include "_candidato.html" %}
+        {% endfor %}
+      </ol>
+    {% else %}
+      <div class="aviso" role="status">
+        <strong>Nenhum candidato encontrado</strong>
+        <p>Nenhum nome, número ou partido corresponde a "{{ busca }}".
+           <a href="{{ url_for('resultados', eleicao=eleicao_id, cargo=cargo, municipio=cod_mun) }}">Ver todos</a></p>
+      </div>
+    {% endif %}
+
+    {# Heurística 8 (design minimalista): listas grandes mostram só o início #}
+    {% if candidatos | length < total_encontrado %}
+      <div class="mais">
+        <p>Mostrando {{ candidatos | length }} de {{ total_encontrado }} candidatos.
+           Use a busca acima para encontrar um nome específico.</p>
+        <a class="botao contorno" href="{{ url_for('resultados', eleicao=eleicao_id, cargo=cargo, municipio=cod_mun, todos=1) }}">
+          Mostrar todos os {{ total_encontrado }}
+        </a>
+      </div>
+    {% endif %}
+
+    <p class="nota-fonte"><strong>Dado oficial:</strong> nomes, números, partidos, votos e situação vêm do
+      servidor de resultados do TSE. O percentual é calculado pelo próprio TSE sobre os votos válidos.
+      Dúvidas sobre os termos? <a href="/ajuda#glossario">Veja o glossário</a>.</p>
+  {% endif %}
+</div>
+{% endblock %}

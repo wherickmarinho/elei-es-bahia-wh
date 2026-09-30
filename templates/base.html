@@ -1,0 +1,76 @@
+<!doctype html>
+<!--
+  Molde comum a todas as páginas (cabeçalho, menu e rodapé).
+  Cada página "estende" este arquivo e preenche o bloco "conteudo".
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Eleições Bahia{% endblock %}</title>
+  <meta name="description" content="Resultados eleitorais da Bahia a partir da base oficial do TSE.">
+  <link rel="icon" href="/avatar.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/estilo.css">
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="cabecalho">
+    <div class="faixa" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="container cabecalho-linha">
+      <a href="/" class="marca">
+        <strong>Eleições Bahia</strong>
+        <small>Resultados oficiais do TSE</small>
+      </a>
+
+      {# Heurística 1: o item da página atual fica destacado no menu #}
+      {% set menu = [
+        ("inicio", "/", "Início"),
+        ("resultados", "/resultados", "Resultados"),
+        ("municipios", "/municipios", "Municípios"),
+        ("ajuda", "/ajuda", "Ajuda"),
+        ("sobre", "/sobre", "Sobre os dados"),
+      ] %}
+      <nav aria-label="Menu principal">
+        <ul class="menu">
+          {% for endpoint, endereco, texto in menu %}
+            <li>
+              <a href="{{ endereco }}" {% if request.endpoint == endpoint %}aria-current="page"{% endif %}>
+                {{ texto }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    {% block conteudo %}{% endblock %}
+  </main>
+
+  <footer class="rodape">
+    <div class="container">
+      <p>Fonte: Tribunal Superior Eleitoral (TSE), servidor oficial de resultados. Regiões: IBGE.</p>
+      <p>Projeto acadêmico e apartidário. Não recomenda nem avalia candidatos.
+         <a href="/sobre">Como os dados são obtidos</a></p>
+    </div>
+  </footer>
+
+  <script>
+    // Heurística 1 (visibilidade do status): ao enviar um formulário,
+    // o botão avisa que a busca está em andamento.
+    document.querySelectorAll("form").forEach(function (formulario) {
+      formulario.addEventListener("submit", function () {
+        var botao = formulario.querySelector("button[type=submit]");
+        if (botao) {
+          botao.disabled = true;
+          botao.textContent = "Buscando…";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

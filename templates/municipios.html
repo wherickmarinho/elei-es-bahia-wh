@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block titulo %}Municípios · Eleições Bahia{% endblock %}
+
+{% block conteudo %}
+<div class="container secao">
+  <nav class="trilha" aria-label="Você está em"><a href="/">Início</a> › <span>Municípios</span></nav>
+  <h1>Os municípios da Bahia</h1>
+  <p class="subtitulo">Organizados pelas regiões geográficas intermediárias do IBGE.
+     Escolha um município para ver o resultado de prefeito de 2024.</p>
+
+  <form action="/municipios" class="filtro-simples">
+    <label for="q" class="sr-only">Filtrar municípios</label>
+    <input id="q" name="q" type="search" value="{{ filtro }}" placeholder="Filtrar pelo nome">
+    <button type="submit" class="botao">Filtrar</button>
+    {% if filtro %}<a href="/municipios" class="limpar">Limpar</a>{% endif %}
+  </form>
+
+  {% if erro %}
+    <div class="aviso erro" role="alert">
+      <strong>Não foi possível carregar a lista de municípios</strong>
+      <p>{{ erro }} <a href="{{ request.full_path }}">Tentar novamente</a></p>
+    </div>
+  {% elif total == 0 %}
+    <div class="aviso" role="status">
+      <strong>Nenhum município encontrado</strong>
+      <p>Nenhum nome corresponde a "{{ filtro }}". <a href="/municipios">Ver todos</a></p>
+    </div>
+  {% else %}
+    <p class="contagem">{{ total }} municípios{% if filtro %} para "{{ filtro }}"{% endif %}</p>
+
+    {# Atalhos para cada região #}
+    {% if regioes | length > 1 %}
+      <nav class="atalhos" aria-label="Regiões">
+        {% for regiao in regioes %}<a href="#regiao-{{ loop.index }}">{{ regiao }}</a>{% endfor %}
+      </nav>
+    {% endif %}
+
+    {% for regiao, lista in regioes.items() %}
+      <section id="regiao-{{ loop.index }}" class="regiao">
+        <div class="regiao-titulo">
+          <h2>Região de {{ regiao }}</h2>
+          <p>{{ lista | length }} municípios</p>
+        </div>
+        <ul class="colunas">
+          {% for m in lista %}
+            <li>
+              <a href="/resultados?eleicao=2024-1&municipio={{ m.codigo_tse }}">{{ m.nome }}</a>
+              {% if m.capital %}<small>(capital)</small>{% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endfor %}
+  {% endif %}
+</div>
+{% endblock %}

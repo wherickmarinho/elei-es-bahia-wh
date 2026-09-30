@@ -1,0 +1,51 @@
+{#
+  Um candidato da lista de resultados.
+  Recebe a variável "c" (um dicionário criado em dados/tse.py).
+#}
+<li class="candidato">
+  {# Ícone de rosto genérico, como o de perfil sem foto do WhatsApp #}
+  <img src="/avatar.svg" alt="" width="52" height="52" class="avatar">
+
+  <div class="candidato-corpo">
+    <div class="candidato-topo">
+      <div>
+        <h3>{{ c.nome_urna }}</h3>
+        <p class="nome-completo">{{ c.nome_completo }}</p>
+        <p>Nº {{ c.numero }} <span class="separador">|</span> <abbr title="{{ c.partido_nome }}">{{ c.partido }}</abbr></p>
+      </div>
+      {% if resultado.apuracao.iniciada %}
+        <div class="votos">
+          <p class="percentual">{{ c.percentual | percentual }}</p>
+          <p>{{ c.votos | numero }} votos</p>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if resultado.apuracao.iniciada %}
+      {# Barra proporcional ao % de votos válidos (escala de 0% a 100%) #}
+      <div class="barra" aria-hidden="true"><span style="width: {{ c.percentual }}%"></span></div>
+    {% endif %}
+
+    <p class="situacao-linha">
+      {% set classe = "eleito" if c.situacao.startswith("Eleito") else ("turno" if "turno" in c.situacao else "") %}
+      <span class="situacao {{ classe }}">{{ c.situacao or "Aguardando apuração" }}</span>
+      {% if c.destino_votos and c.destino_votos != "Válido" %}
+        <span class="alerta">Votos: {{ c.destino_votos }}</span>
+      {% endif %}
+    </p>
+
+    <details>
+      <summary>Mais informações</summary>
+      <dl class="detalhes">
+        <div><dt>Partido</dt><dd>{{ c.partido_nome }}</dd></div>
+        {% if c.coligacao %}
+          <div><dt>Coligação / federação</dt><dd>{{ c.coligacao }}<br><small>{{ c.composicao }}</small></dd></div>
+        {% endif %}
+        {% for v in c.companheiros %}
+          <div><dt>{{ v.tipo }}</dt><dd>{{ v.nome_urna }} ({{ v.partido }})<br><small>{{ v.nome }}</small></dd></div>
+        {% endfor %}
+        <div><dt>Código do candidato no TSE</dt><dd>{{ c.codigo_tse }}</dd></div>
+      </dl>
+    </details>
+  </div>
+</li>

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block titulo %}Ajuda · Eleições Bahia{% endblock %}
+
+{# Heurística 10 (ajuda e documentação): como usar o site e o que significa cada termo #}
+{% block conteudo %}
+<div class="container estreito secao">
+  <nav class="trilha" aria-label="Você está em"><a href="/">Início</a> › <span>Ajuda</span></nav>
+  <h1>Como usar o site</h1>
+
+  <ol class="passos">
+    <li><strong>Escolha a eleição</strong> no topo da página de <a href="/resultados">Resultados</a>:
+        2026 (governador, senador e deputados) ou 2024 (prefeito e vereador).</li>
+    <li><strong>Escolha o cargo.</strong> Só aparecem os cargos que existem na eleição escolhida.</li>
+    <li><strong>Digite o município.</strong> O site sugere os nomes enquanto você digita. Na eleição
+        de 2026, deixe vazio para ver a Bahia inteira.</li>
+    <li><strong>Procure um candidato</strong> pelo nome, número ou partido, se quiser.</li>
+    <li><strong>Clique em "Mais informações"</strong> em um candidato para ver partido, coligação,
+        vice ou suplentes.</li>
+  </ol>
+  <p>Dica: o endereço da página guarda todas as escolhas. Copie e envie o link para mostrar o
+     mesmo resultado a outra pessoa.</p>
+
+  <h2 id="glossario">Glossário</h2>
+  <dl class="glossario">
+    <dt>Aguardando apuração</dt>
+    <dd>A votação ainda não aconteceu ou os votos ainda não começaram a ser contados. A lista mostra
+        os candidatos registrados no TSE.</dd>
+
+    <dt>Seções totalizadas</dt>
+    <dd>Durante a apuração, indica quanto da contagem já foi concluído. Com 100%, a totalização
+        terminou.</dd>
+
+    <dt>Eleitorado</dt>
+    <dd>Número de pessoas aptas a votar naquele local.</dd>
+
+    <dt>Comparecimento</dt>
+    <dd>Eleitores que foram votar.</dd>
+
+    <dt>Abstenção</dt>
+    <dd>Eleitores aptos que não foram votar.</dd>
+
+    <dt>Votos válidos</dt>
+    <dd>Votos dados a candidatos ou partidos. Não incluem brancos e nulos. O percentual de cada
+        candidato é calculado sobre os votos válidos.</dd>
+
+    <dt>Votos brancos e nulos</dt>
+    <dd>Branco: o eleitor apertou a tecla BRANCO. Nulo: digitou um número que não corresponde a
+        nenhum candidato. Nenhum dos dois conta para candidatos.</dd>
+
+    <dt>2º turno</dt>
+    <dd>Nova votação entre os dois mais votados, quando ninguém alcança mais da metade dos votos
+        válidos (para governador, e para prefeito em municípios com mais de 200 mil eleitores).</dd>
+
+    <dt>Eleito por QP</dt>
+    <dd>Eleito pelo <strong>quociente partidário</strong>: nas eleições para vereador e deputado,
+        as vagas são distribuídas primeiro entre os partidos, de acordo com o total de votos de
+        cada um, e depois preenchidas pelos candidatos mais votados de cada partido.</dd>
+
+    <dt>Eleito por média</dt>
+    <dd>Eleito na distribuição das vagas que sobram depois do cálculo do quociente partidário.</dd>
+
+    <dt>Suplente</dt>
+    <dd>Não foi eleito, mas pode assumir a vaga se um eleito do seu partido ou federação sair.</dd>
+
+    <dt>Coligação / federação</dt>
+    <dd>União de partidos para disputar a eleição. Na federação, os partidos atuam juntos também
+        depois da eleição.</dd>
+
+    <dt>Votos anulados</dt>
+    <dd>Votos de um candidato cuja candidatura foi considerada irregular pela Justiça Eleitoral.
+        Eles não contam como válidos.</dd>
+  </dl>
+
+  <p class="nota-fonte">Termos baseados nas definições do Tribunal Superior Eleitoral. Para saber de onde
+     vêm os dados, veja <a href="/sobre">Sobre os dados</a>.</p>
+</div>
+{% endblock %}

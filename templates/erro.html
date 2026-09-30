@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block titulo %}{{ titulo }} · Eleições Bahia{% endblock %}
+
+{# Heurística 9: mensagem clara e uma saída, em vez de uma tela quebrada #}
+{% block conteudo %}
+<div class="container estreito secao">
+  <h1>{{ titulo }}</h1>
+  <p class="subtitulo">{{ mensagem }}</p>
+  <p><a class="botao" href="/">Voltar ao início</a></p>
+</div>
+{% endblock %}

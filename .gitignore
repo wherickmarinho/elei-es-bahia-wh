@@ -1,0 +1,17 @@
+# Arquivos gerados pelo Python (não vão para o GitHub)
+__pycache__/
+*.pyc
+
+# Ambiente virtual do Python, se alguém criar um
+.venv/
+venv/
+
+# Variáveis de ambiente e segredos (este projeto não usa, mas é boa prática)
+.env
+
+# Pasta criada pela Vercel ao publicar
+.vercel
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db

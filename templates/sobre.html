@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block titulo %}Sobre os dados · Eleições Bahia{% endblock %}
+
+{% block conteudo %}
+<div class="container estreito secao">
+  <nav class="trilha" aria-label="Você está em"><a href="/">Início</a> › <span>Sobre os dados</span></nav>
+  <h1>De onde vêm as informações</h1>
+  <p class="subtitulo">Todas as informações eleitorais deste site são buscadas diretamente em fontes
+     oficiais, no momento da consulta. Nenhum dado é digitado à mão.</p>
+
+  <section class="bloco">
+    <h2>Fonte principal: TSE</h2>
+    <p><strong>Tribunal Superior Eleitoral</strong>, servidor oficial de resultados:
+       <a href="https://resultados.tse.jus.br">resultados.tse.jus.br</a>. É o mesmo servidor usado
+       pelo aplicativo Resultados do TSE. Dele vêm nomes, números, partidos, coligações, vices e
+       suplentes, votos, percentuais, situação de cada candidato e os totais de comparecimento,
+       abstenção, brancos e nulos.</p>
+  </section>
+
+  <section class="bloco">
+    <h2>Fonte complementar: IBGE</h2>
+    <p><strong>Instituto Brasileiro de Geografia e Estatística</strong>,
+       <a href="https://servicodados.ibge.gov.br/api/docs">API de Localidades</a>: nomes dos
+       municípios e divisão da Bahia em regiões geográficas. Não é dado eleitoral.</p>
+  </section>
+
+  <section class="bloco">
+    <h2>Como os dados são processados</h2>
+    <ol>
+      <li>O site chama a URL do TSE da eleição, do cargo e do município escolhidos.</li>
+      <li>A resposta chega em formato JSON e é convertida para um formato mais simples.</li>
+      <li>Os candidatos são ordenados pelo número de votos.</li>
+      <li>A página exibe o resultado.</li>
+    </ol>
+  </section>
+
+  <section class="bloco">
+    <h2>Oficial ou organizado pelo site</h2>
+    <p><strong>Dado oficial:</strong> tudo o que aparece nos resultados, inclusive os percentuais,
+       que já vêm calculados pelo TSE sobre os votos válidos.</p>
+    <p><strong>Organização do site:</strong> a ordem por votos, o agrupamento de municípios por
+       região e a barra ao lado de cada candidato (percentual oficial numa escala de 0% a 100%).</p>
+  </section>
+
+  <section class="bloco">
+    <h2>Limitações</h2>
+    <ul>
+      <li>O TSE não publica documentação para programadores deste servidor. A estrutura dos
+          endereços foi identificada a partir do índice que o próprio servidor disponibiliza e pode
+          mudar sem aviso.</li>
+      <li>O servidor guarda apenas eleições recentes: 2026 e 2024 (1º e 2º turnos). Os arquivos de
+          2022 foram retirados pelo TSE em 30/09/2026. Eleições anteriores estão no
+          <a href="https://dadosabertos.tse.jus.br/">Portal de Dados Abertos do TSE</a>, apenas para download.</li>
+      <li>A eleição de 2026 acontece em 4 de outubro de 2026. Até a apuração, o site mostra os
+          candidatos registrados; os votos aparecem automaticamente, com atualização a cada 5 minutos.</li>
+      <li>O site não exibe fotos de candidatos; um ícone genérico é usado no lugar.</li>
+    </ul>
+  </section>
+
+  <section class="bloco">
+    <h2>Neutralidade</h2>
+    <p>Projeto acadêmico e apartidário. O site apresenta dados oficiais sem recomendar, avaliar ou
+       classificar candidatos, partidos ou posições políticas.</p>
+  </section>
+</div>
+{% endblock %}

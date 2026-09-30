@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<section class="abertura">
+  <div class="container abertura-grade">
+    <div>
+      <p class="chapeu">Portal de dados eleitorais</p>
+      <h1>Resultados eleitorais da Bahia, direto da base oficial do TSE</h1>
+      <p class="linha-fina">
+        Consulte votos, percentuais e a situação de cada candidato, no estado inteiro
+        ou em qualquer um dos municípios baianos.
+      </p>
+
+      {# Heurística 6 (reconhecer em vez de lembrar): a lista sugere os nomes enquanto se digita #}
+      <form action="/resultados" class="busca-principal">
+        <input type="hidden" name="eleicao" value="2026-1">
+        <label for="municipio">Buscar município</label>
+        <div class="campo-com-botao">
+          <input id="municipio" name="municipio" list="lista-municipios"
+                 placeholder="Ex.: Guanambi, Feira de Santana…" autocomplete="off" required>
+          <button type="submit" class="botao">Buscar</button>
+        </div>
+        <datalist id="lista-municipios">
+          {% for m in municipios %}<option value="{{ m.nome }}">{% endfor %}
+        </datalist>
+        <p class="dica">Mostra governador de 2026 no município. Outros cargos e anos podem ser escolhidos em seguida.</p>
+      </form>
+    </div>
+
+    {% if destaque %}
+    <aside class="numeros" aria-label="Bahia em números">
+      <p class="numeros-titulo">Bahia em números · eleição de 2026</p>
+      <dl>
+        <div><dt>Eleitorado</dt><dd>{{ destaque.totais.eleitorado | numero }}</dd></div>
+        {% if destaque.apuracao.iniciada %}
+          <div><dt>Comparecimento</dt><dd>{{ destaque.totais.percentual_comparecimento }}%</dd></div>
+        {% else %}
+          <div><dt>Candidatos a governador</dt><dd>{{ destaque.candidatos | length }}</dd></div>
+        {% endif %}
+        <div><dt>Municípios</dt><dd>{{ municipios | length }}</dd></div>
+        <div><dt>Regiões intermediárias (IBGE)</dt><dd>{{ total_regioes }}</dd></div>
+      </dl>
+      <p class="fonte">{{ destaque.apuracao.texto }}. Fonte: TSE e IBGE.</p>
+    </aside>
+    {% endif %}
+  </div>
+</section>
+
+<section class="container duas-colunas secao">
+  <div>
+    {# Heurística 7 (flexibilidade e eficiência): atalhos para as consultas mais comuns #}
+    <h2>Consultas rápidas</h2>
+    <ul class="lista-links">
+      <li><a href="/resultados?eleicao=2026-1&cargo=0003"><span>Governador · Bahia</span><small>2026, 1º turno →</small></a></li>
+      <li><a href="/resultados?eleicao=2026-1&cargo=0005"><span>Senador · Bahia</span><small>2026, 1º turno →</small></a></li>
+      <li><a href="/resultados?eleicao=2026-1&cargo=0006"><span>Deputado Federal · Bahia</span><small>2026, 1º turno →</small></a></li>
+      <li><a href="/resultados?eleicao=2026-1&cargo=0007"><span>Deputado Estadual · Bahia</span><small>2026, 1º turno →</small></a></li>
+      <li><a href="/resultados?eleicao=2024-1&cargo=0011&municipio=38490"><span>Prefeito · Salvador</span><small>2024, 1º turno →</small></a></li>
+      <li><a href="/resultados?eleicao=2024-2&cargo=0011&municipio=34134"><span>Prefeito · Camaçari</span><small>2024, 2º turno →</small></a></li>
+    </ul>
+    <p><a href="/municipios">Ver todos os municípios por região</a></p>
+  </div>
+
+  <div>
+    <h2>Eleições disponíveis</h2>
+    <ul class="lista-simples">
+      {% for id, e in eleicoes.items() %}
+        <li>
+          <a href="/resultados?eleicao={{ id }}"><strong>{{ e.titulo }}</strong></a>
+          <br><small>{{ e.cargos.values() | join(", ") }}{% if e.municipal %} (por município){% endif %}</small>
+        </li>
+      {% endfor %}
+    </ul>
+    <p class="dica">A eleição de 2026 acontece em 4 de outubro. Até lá, o site mostra os candidatos
+       registrados no TSE; os votos aparecem automaticamente durante a apuração.</p>
+    <p>Primeira vez aqui? <a href="/ajuda">Veja como usar o site</a>.</p>
+  </div>
+</section>
+{% endblock %}

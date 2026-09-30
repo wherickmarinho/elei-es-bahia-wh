@@ -1,0 +1,207 @@
+/*
+  Estilo do site Eleições Bahia.
+  Cores com referência discreta à bandeira da Bahia (azul, branco, vermelho)
+  sobre um fundo claro, como papel de jornal.
+*/
+
+/* ========== 1. Cores e fontes (mude aqui para mudar o site inteiro) ========== */
+:root {
+  --papel: #f6f4ef;       /* fundo da página */
+  --branco: #ffffff;      /* fundo de caixas */
+  --tinta: #16191f;       /* texto principal */
+  --tinta-suave: #5b6170; /* texto secundário */
+  --linha: #dcd8cf;       /* bordas */
+  --azul: #1f4e8c;
+  --azul-escuro: #163a69;
+  --vermelho: #b8232f;
+  --serifa: "Source Serif 4", Georgia, serif;
+  --sem-serifa: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ========== 2. Base ========== */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--sem-serifa);
+  font-size: 16px;
+  line-height: 1.5;
+}
+h1, h2, h3 { font-family: var(--serifa); font-weight: 600; line-height: 1.2; margin: 0; }
+h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+h2 { font-size: 1.5rem; margin-bottom: .75rem; }
+h3 { font-size: 1.15rem; }
+p { margin: 0 0 .5rem; }
+a { color: var(--azul); }
+small, .dica, .fonte { color: var(--tinta-suave); font-size: .85rem; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+:focus-visible { outline: 2px solid var(--azul); outline-offset: 2px; }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+.estreito { max-width: 780px; }
+.secao { padding-top: 32px; padding-bottom: 32px; }
+
+/* Link escondido que aparece ao usar o teclado (acessibilidade) */
+.pular { position: absolute; left: -999px; }
+.pular:focus { left: 16px; top: 8px; background: var(--branco); padding: 8px; z-index: 10; }
+
+/* ========== 3. Cabeçalho e rodapé ========== */
+.cabecalho { background: var(--branco); border-bottom: 1px solid var(--linha); }
+.faixa { display: flex; height: 4px; }
+.faixa span:nth-child(1) { flex: 3; background: var(--azul); }
+.faixa span:nth-child(2) { flex: 1; background: var(--branco); }
+.faixa span:nth-child(3) { flex: 1; background: var(--vermelho); }
+.cabecalho-linha {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 8px 32px; padding-top: 14px; padding-bottom: 14px;
+}
+.marca { color: var(--tinta); text-decoration: none; line-height: 1.2; }
+.marca strong { display: block; font-family: var(--serifa); font-size: 1.3rem; }
+.marca small { font-size: .75rem; }
+.menu { display: flex; flex-wrap: wrap; gap: 4px; list-style: none; margin: 0 0 0 -12px; padding: 0; }
+.menu a { display: block; padding: 8px 12px; color: var(--tinta-suave); text-decoration: none; font-size: .95rem; }
+.menu a:hover { color: var(--azul); }
+.menu a[aria-current="page"] { color: var(--azul); font-weight: 600; box-shadow: inset 0 -2px 0 var(--azul); }
+
+.rodape { margin-top: 48px; background: var(--branco); border-top: 1px solid var(--linha); padding: 24px 0; color: var(--tinta-suave); font-size: .9rem; }
+
+/* ========== 4. Botões e formulários ========== */
+.botao {
+  display: inline-block; background: var(--azul); color: #fff; border: 0;
+  padding: 10px 20px; font: inherit; text-decoration: none; cursor: pointer;
+}
+.botao:hover { background: var(--azul-escuro); }
+.botao:disabled { opacity: .7; cursor: wait; }
+.botao.contorno { background: transparent; color: var(--azul); border: 1px solid var(--azul); }
+.botao.contorno:hover { background: var(--azul); color: #fff; }
+input {
+  width: 100%; padding: 10px 12px; font: inherit;
+  border: 1px solid var(--linha); background: var(--branco); color: var(--tinta);
+}
+label span { display: block; font-size: .85rem; color: var(--tinta-suave); margin-bottom: 4px; }
+.limpar { font-size: .9rem; }
+
+/* ========== 5. Página inicial ========== */
+.abertura { background: var(--branco); border-bottom: 1px solid var(--linha); }
+.abertura-grade { display: grid; gap: 40px; padding-top: 48px; padding-bottom: 48px; }
+.chapeu { text-transform: uppercase; letter-spacing: .05em; font-size: .8rem; color: var(--azul); }
+.linha-fina { font-size: 1.15rem; color: var(--tinta-suave); margin-top: 16px; max-width: 36em; }
+.busca-principal { margin-top: 28px; max-width: 560px; }
+.busca-principal label { font-weight: 600; font-size: .9rem; }
+.campo-com-botao { display: flex; gap: 8px; margin: 6px 0; }
+.campo-com-botao input { border-color: var(--tinta); }
+
+.numeros { align-self: end; }
+.numeros-titulo { text-transform: uppercase; font-size: .75rem; font-weight: 600; letter-spacing: .04em; border-bottom: 1px solid var(--tinta); padding-bottom: 8px; }
+.numeros dl { margin: 0; }
+.numeros dl div { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--linha); }
+.numeros dt { color: var(--tinta-suave); }
+.numeros dd { margin: 0; font-family: var(--serifa); font-size: 1.5rem; }
+
+.duas-colunas { display: grid; gap: 40px; }
+.lista-links { list-style: none; padding: 0; margin: 0 0 16px; border-top: 1px solid var(--tinta); }
+.lista-links a { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--linha); color: var(--tinta); text-decoration: none; }
+.lista-links a:hover { color: var(--azul); }
+.lista-simples { list-style: none; padding: 12px 0 0; margin: 0 0 16px; border-top: 1px solid var(--tinta); }
+.lista-simples li { margin-bottom: 14px; }
+.lista-simples a { color: var(--tinta); text-decoration: none; }
+
+/* ========== 6. Resultados ========== */
+.trilha { font-size: .85rem; color: var(--tinta-suave); margin-bottom: 12px; }
+.subtitulo { color: var(--tinta-suave); margin-top: 8px; font-size: 1.05rem; }
+
+.filtros { margin: 28px 0; padding: 20px 0; border-top: 1px solid var(--linha); border-bottom: 1px solid var(--linha); }
+.rotulo { text-transform: uppercase; font-size: .75rem; letter-spacing: .05em; color: var(--tinta-suave); margin: 12px 0 6px; }
+.opcoes { display: flex; flex-wrap: wrap; gap: 8px; }
+.opcao { padding: 6px 12px; border: 1px solid var(--linha); background: var(--branco); color: var(--tinta); text-decoration: none; font-size: .9rem; }
+.opcao:hover { border-color: var(--azul); }
+.opcao.ativa { background: var(--azul); border-color: var(--azul); color: #fff; }
+.opcao.escura.ativa { background: var(--tinta); border-color: var(--tinta); }
+.formulario-filtros { display: grid; gap: 12px; margin-top: 20px; }
+.acoes { display: flex; align-items: center; gap: 16px; }
+
+.aviso { background: var(--branco); border-left: 4px solid var(--azul); padding: 14px 18px; margin: 20px 0; }
+.aviso.erro { border-left-color: var(--vermelho); }
+.aviso p { margin: 4px 0 0; color: var(--tinta-suave); font-size: .95rem; }
+
+.status-apuracao { display: inline-block; margin: 12px 0 0; padding: 4px 10px; font-size: .85rem; font-weight: 600; border: 1px solid var(--linha); background: var(--branco); color: var(--tinta-suave); }
+.status-apuracao.iniciada { border-color: var(--azul); color: var(--azul); }
+.contexto { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 24px; color: var(--tinta-suave); font-size: .9rem; }
+
+.totais { display: grid; grid-template-columns: repeat(2, 1fr); margin: 12px 0 32px; background: var(--branco); border-top: 1px solid var(--linha); border-left: 1px solid var(--linha); }
+.totais div { padding: 12px 16px; border-right: 1px solid var(--linha); border-bottom: 1px solid var(--linha); }
+.totais dt { text-transform: uppercase; font-size: .72rem; letter-spacing: .04em; color: var(--tinta-suave); }
+.totais dd { margin: 4px 0 0; font-family: var(--serifa); font-size: 1.25rem; }
+.totais small { font-family: var(--sem-serifa); }
+
+.titulo-lista { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; }
+.titulo-lista p { color: var(--tinta-suave); font-size: .9rem; }
+
+/* ========== 7. Lista de candidatos ========== */
+.candidatos { list-style: none; margin: 0; padding: 0; background: var(--branco); border-top: 1px solid var(--linha); }
+.candidato { display: flex; gap: 16px; padding: 16px; border-bottom: 1px solid var(--linha); }
+.avatar { flex-shrink: 0; border-radius: 50%; }
+.candidato-corpo { flex: 1; min-width: 0; }
+.candidato-topo { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+.nome-completo { color: var(--tinta-suave); font-size: .9rem; margin: 0; }
+.candidato-topo p { margin: 2px 0 0; font-size: .95rem; }
+.separador { color: var(--linha); margin: 0 6px; }
+abbr { text-decoration: none; }
+.votos .percentual { font-family: var(--serifa); font-size: 1.6rem; font-weight: 600; }
+.votos p:last-child { color: var(--tinta-suave); font-size: .9rem; }
+
+.barra { height: 6px; background: var(--papel); margin-top: 12px; }
+.barra span { display: block; height: 100%; background: var(--azul); }
+
+.situacao-linha { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 10px; }
+/* Situação em tons neutros, para não dar peso emocional ao resultado */
+.situacao { font-size: .8rem; font-weight: 600; padding: 2px 8px; color: var(--tinta-suave); }
+.situacao.eleito { background: var(--tinta); color: #fff; }
+.situacao.turno { border: 1px solid var(--tinta); color: var(--tinta); }
+.alerta { color: var(--vermelho); font-size: .8rem; }
+
+details { margin-top: 10px; font-size: .9rem; }
+summary { color: var(--azul); cursor: pointer; }
+.detalhes { display: grid; gap: 8px 24px; margin: 10px 0 0; }
+.detalhes dt { color: var(--tinta-suave); }
+.detalhes dd { margin: 0; }
+
+.mais { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-top: 16px; font-size: .9rem; color: var(--tinta-suave); }
+.nota-fonte { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--linha); font-size: .8rem; color: var(--tinta-suave); }
+
+/* ========== 8. Municípios ========== */
+.filtro-simples { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 24px 0; max-width: 480px; }
+.filtro-simples input { flex: 1; min-width: 180px; }
+.contagem { color: var(--tinta-suave); font-size: .9rem; }
+.atalhos { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 16px 0 8px; font-size: .9rem; }
+.regiao { margin-top: 36px; scroll-margin-top: 16px; }
+.regiao-titulo { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--tinta); padding-bottom: 6px; }
+.regiao-titulo h2 { margin: 0; }
+.regiao-titulo p { color: var(--tinta-suave); font-size: .9rem; margin: 0; }
+.colunas { columns: 2; column-gap: 24px; list-style: none; padding: 0; margin: 12px 0 0; font-size: .95rem; }
+.colunas li { break-inside: avoid; padding: 3px 0; }
+.colunas a { color: var(--tinta); text-decoration: none; }
+.colunas a:hover { color: var(--azul); text-decoration: underline; }
+
+/* ========== 9. Ajuda e Sobre ========== */
+.passos li { margin-bottom: 8px; }
+.glossario dt { font-weight: 600; margin-top: 14px; }
+.glossario dd { margin: 2px 0 0; color: var(--tinta-suave); }
+.bloco { border-top: 1px solid var(--linha); padding: 20px 0; }
+.bloco p, .bloco li { color: var(--tinta-suave); }
+
+/* ========== 10. Telas maiores (tablet e computador) ========== */
+@media (min-width: 700px) {
+  .totais { grid-template-columns: repeat(3, 1fr); }
+  .formulario-filtros { grid-template-columns: 1fr 1fr auto; align-items: end; }
+  .colunas { columns: 3; }
+  .detalhes { grid-template-columns: 1fr 1fr; }
+  .votos { text-align: right; }
+}
+@media (min-width: 1000px) {
+  .abertura-grade { grid-template-columns: 1.4fr 1fr; padding-top: 72px; padding-bottom: 72px; }
+  .duas-colunas { grid-template-columns: 1.4fr 1fr; }
+  .totais { grid-template-columns: repeat(6, 1fr); }
+  .colunas { columns: 4; }
+}

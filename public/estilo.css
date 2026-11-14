@@ -205,3 +205,38 @@ summary { color: var(--azul); cursor: pointer; }
   .totais { grid-template-columns: repeat(6, 1fr); }
   .colunas { columns: 4; }
 }
+
+
+/* ==========================================
+   MODO ESCURO - INTEGRAÇÃO BAHIA HUB
+   ========================================== */
+
+html.dark {
+  color-scheme: dark;
+
+  --papel: #111827;
+  --branco: #1f2937;
+  --tinta: #f3f4f6;
+  --tinta-suave: #aeb8c6;
+  --linha: #374151;
+
+  --azul: #7db7ff;
+  --azul-escuro: #4b91dc;
+  --vermelho: #ff7b85;
+}
+
+/* Ajustes de elementos com cores fixas */
+html.dark .situacao.eleito {
+  background: #374151;
+  color: #ffffff;
+}
+
+html.dark .botao.contorno {
+  color: var(--azul);
+}
+
+html.dark .botao.contorno:hover {
+  background: var(--azul);
+  color: #111827;
+}
+

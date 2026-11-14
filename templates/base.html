@@ -71,6 +71,25 @@
         }
       });
     });
+
+
+    // Recebe a mudança de tema enviada pelo Bahia Hub
+    window.addEventListener('message', (event) => {
+      const allowed = [
+        'https://bahia-hub.vercel.app',
+        'http://localhost:5173'
+      ];
+
+      if (!allowed.includes(event.origin)) return;
+
+      if (event.data?.type === 'bahia-hub:theme') {
+        document.documentElement.classList.toggle(
+          'dark',
+          event.data.theme === 'dark'
+        );
+      }
+    });
+
   </script>
 </body>
 </html>
